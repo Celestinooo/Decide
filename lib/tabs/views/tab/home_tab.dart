@@ -18,10 +18,6 @@ class HomeTab extends StatelessWidget {
             indicatorColor: Colors.red,
             tabs: [
               Tab(
-                text: 'Em Alta',
-                icon: Icon(Icons.trending_up,color: Colors.white,size: 32,),
-              ),
-              Tab(
                 text: 'Seguindo',
                 icon: Icon(Icons.follow_the_signs_sharp,color: Colors.white,size: 32,),
               ),

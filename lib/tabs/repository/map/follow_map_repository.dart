@@ -4,6 +4,6 @@ import 'package:decide/tabs/repository/map/map_repository.dart';
 class FollowMapRepository extends MapRepository<FollowModel, String> {
   FollowMapRepository() {
     insert(
-    "lucao:pedro", FollowModel(0, 1));
+    "0:1", FollowModel(0, 1));
   }
 }

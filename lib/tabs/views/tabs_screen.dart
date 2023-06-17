@@ -1,6 +1,8 @@
+import 'package:decide/tabs/stores/search_store.dart';
 import 'package:decide/tabs/views/tab/home_tab.dart';
-import 'package:decide/tabs/views/tab/notifications_tab.dart';
+import 'package:decide/tabs/views/tab/search_tab.dart';
 import 'package:decide/tabs/views/tab/create_tab.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:decide/tabs/views/tab/profile_tab.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +18,7 @@ class _TabsScreenState extends State<TabsScreen> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     const HomeTab(),
-    const NotificationsTab(),
+    const SearchTab(),
     const ProfileTab(),
   ];
 
@@ -43,12 +45,12 @@ class _TabsScreenState extends State<TabsScreen> {
             onTap: _onItemTapped,
             items: const [
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
+                icon: Icon(Icons.feed),
+                label: 'Feed',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.notifications_active),
-                label: 'Notificações',
+                icon: Icon(Icons.search),
+                label: 'Buscar',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.person),
