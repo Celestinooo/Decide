@@ -66,6 +66,7 @@ class _CommentsModalState extends State<CommentsModal> {
                           const SizedBox(width: 8.0),
                           Expanded(
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
@@ -110,7 +111,7 @@ class _CommentsModalState extends State<CommentsModal> {
                                 ),
                                 Row(
                                   children: [
-                                    Flexible(
+                                    Expanded(
                                       flex: 3,
                                       child: Text(
                                         comment.comment,
@@ -120,17 +121,19 @@ class _CommentsModalState extends State<CommentsModal> {
                                     const Spacer(
                                       flex: 2,
                                     ),
-                                    Flexible(
-                                      flex: 1,
-                                      child: Container(
-                                        height: 60.0,
-                                        width: 60.0,
-                                        color: Colors.grey[200],
-                                        child: Center(
-                                          child: Image.asset(
-                                              comment.votedOption.picture),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          height: 60.0,
+                                          width: 60.0,
+                                          color: Colors.grey[200],
+                                          child: Center(
+                                            child: Image.asset(
+                                                comment.votedOption.picture),
+                                          ),
                                         ),
-                                      ),
+                                      ],
                                     ),
                                   ],
                                 ),
