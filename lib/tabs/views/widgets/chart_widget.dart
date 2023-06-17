@@ -269,8 +269,10 @@ class _ChartWidgetState extends State<ChartWidget> implements OnSendComment {
                               builder: (context) => CommentsModal(
                                 comments: chartModel.chartComments,
                                 currentUser: widget.currentUser,
+                                chartModel: widget.chartModel,
                                 onSendComment: this,
                               ),
+                              isScrollControlled: true
                             );
                           },
                           style: ElevatedButton.styleFrom(

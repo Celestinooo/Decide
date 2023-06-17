@@ -29,6 +29,10 @@ class _TabsScreenState extends State<TabsScreen> {
       final followingStore = Modular.get<FollowingStore>();
       followingStore.getCharts();
     }
+    if(index == 1) {
+      final followingStore = Modular.get<SearchStore>();
+      followingStore.searchUsers();
+    }
     if(index == 2) {
       final profileStore = Modular.get<ProfileStore>();
       profileStore.getProfile();

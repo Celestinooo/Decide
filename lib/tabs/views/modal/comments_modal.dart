@@ -1,22 +1,27 @@
 import 'dart:io';
 
+import 'package:decide/authentication/controller/session_controller.dart';
 import 'package:decide/tabs/models/chart_comment.dart';
+import 'package:decide/tabs/models/chart_model.dart';
 import 'package:decide/tabs/models/profile_model.dart';
+import 'package:decide/tabs/stores/search_store.dart';
 import 'package:decide/tabs/views/modal/on_comment_sent.dart';
 import 'package:decide/tabs/views/modal/on_send_comment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class CommentsModal extends StatefulWidget {
   final ProfileModel? currentUser;
   final List<ChartComment> comments;
+  final ChartModel chartModel;
   final OnSendComment onSendComment;
 
   const CommentsModal(
       {super.key,
       required this.comments,
       required this.currentUser,
-      required this.onSendComment});
+      required this.onSendComment, required this.chartModel});
 
   @override
   State<CommentsModal> createState() => _CommentsModalState();
@@ -94,7 +99,8 @@ class _CommentsModalState extends State<CommentsModal> {
                                           final currentUser = widget.currentUser;
                                           if(currentUser == null) return const SizedBox();
                                           if(commentOwner.login == currentUser.login) return const SizedBox();
-                                          return Container(
+                                          if(Modular.get<SearchStore>().isFollowing(commentOwner.id) == false) {
+                                            return Container(
                                             margin: const EdgeInsets.only(left: 10),
                                             child: const Text(
                                               "Seguir",
@@ -104,6 +110,9 @@ class _CommentsModalState extends State<CommentsModal> {
                                                   fontSize: 16.0),
                                             ),
                                           );
+                                          }else {
+                                            return const SizedBox();
+                                          }
                                         }
                                       ),
                                     ),
@@ -149,51 +158,59 @@ class _CommentsModalState extends State<CommentsModal> {
                 ),
               ),
               const SizedBox(height: 8.0),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Observer(builder: (context) {
-                    final ImageProvider imageProvider;
-                    final currentUser = widget.currentUser;
-                    if(currentUser == null) return const SizedBox();
-                    var imagePath = currentUser.imagePath;
-                    if (imagePath.isEmpty) {
-                      imageProvider = const AssetImage(
-                          "assets/images/default_profile.jpeg");
-                    } else {
-                      imageProvider = FileImage(File(imagePath));
-                    }
-                    return CircleAvatar(
-                        radius: 15, backgroundImage: imageProvider);
-                  }),
-                  const SizedBox(width: 8.0),
-                  Expanded(
-                    child: TextField(
-                      controller: _commentController,
-                      decoration: const InputDecoration(
-                        hintText: "Adicione um comentário...",
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey[800],
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                    ),
-                    icon: const Icon(Icons.next_plan_rounded),
-                    onPressed: () {
-                      widget.onSendComment
-                          .onSendComment(_commentController.text);
-                      FocusManager.instance.primaryFocus?.unfocus();
-                      _commentController.clear();
-                    },
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16.0),
+              Builder(builder: (context) {
+                var ownerID = widget.chartModel.owner.id;
+                var currentProfileID = Modular.get<SessionController>().currentProfile?.id;
+                var voted = widget.chartModel.chartVotes.where((element) => element.participant.id == currentProfileID).toList().isNotEmpty;
+                if(ownerID != currentProfileID  && voted){
+                  return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Observer(builder: (context) {
+                          final ImageProvider imageProvider;
+                          final currentUser = widget.currentUser;
+                          if(currentUser == null) return const SizedBox();
+                          var imagePath = currentUser.imagePath;
+                          if (imagePath.isEmpty) {
+                            imageProvider = const AssetImage(
+                                "assets/images/default_profile.jpeg");
+                          } else {
+                            imageProvider = FileImage(File(imagePath));
+                          }
+                          return CircleAvatar(
+                              radius: 15, backgroundImage: imageProvider);
+                        }),
+                        const SizedBox(width: 8.0),
+                        Expanded(
+                          child: TextField(
+                            controller: _commentController,
+                            decoration: const InputDecoration(
+                              hintText: "Adicione um comentário...",
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey[800],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                          ),
+                          icon: const Icon(Icons.next_plan_rounded),
+                          onPressed: () {
+                            widget.onSendComment
+                                .onSendComment(_commentController.text);
+                            FocusManager.instance.primaryFocus?.unfocus();
+                            _commentController.clear();
+                          },
+                        ),
+                      ],
+                    );
+                } else {
+                  return const SizedBox();
+                }
+              },)
             ],
           ),
         ),

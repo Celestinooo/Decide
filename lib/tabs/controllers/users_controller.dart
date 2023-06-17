@@ -22,15 +22,15 @@ class UsersController {
     }).map((e) => SearchUserModel(id: e.id, name: e.name, login: e.login, imageUrl: e.imagePath)).toList();
   }
 
-  bool? isFollowing(SearchUserModel foundUser) {
+  bool? isFollowing(int foundUserId) {
     final currentUserID = _sessionController.currentProfile?.id;
     if(currentUserID == null) return false;
-    if(currentUserID == foundUser.id) return null;
-    return _followMapRepository.getAll().where((element) => element.followerId == currentUserID && element.followedId == foundUser.id).toList().isNotEmpty;
+    if(currentUserID == foundUserId) return null;
+    return _followMapRepository.getAll().where((element) => element.followerId == currentUserID && element.followedId == foundUserId).toList().isNotEmpty;
   }
 
   void follow(SearchUserModel foundUser) {
-    if(isFollowing(foundUser) != false) return;
+    if(isFollowing(foundUser.id) != false) return;
     var currentUserId = _sessionController.currentProfile?.id;
     if(currentUserId == null) return;
     var followedId = foundUser.id;
@@ -39,7 +39,7 @@ class UsersController {
     _followMapRepository.insert(id, model);
   }
   void unfollow(SearchUserModel foundUser) {
-    if(isFollowing(foundUser) != true) return;
+    if(isFollowing(foundUser.id) != true) return;
     var currentUserId = _sessionController.currentProfile?.id;
     if(currentUserId == null) return;
     var followedId = foundUser.id;

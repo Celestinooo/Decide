@@ -30,8 +30,8 @@ abstract class _SearchStore with Store {
     users.addAll(_usersController.findFiltered(inputController.text));
   }
 
-  bool? isFollowing(SearchUserModel foundUser) {
-    return _usersController.isFollowing(foundUser);
+  bool? isFollowing(int foundUserID) {
+    return _usersController.isFollowing(foundUserID);
   }
 
   void follow(SearchUserModel foundUser) {

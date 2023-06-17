@@ -18,105 +18,109 @@ class _SearchTabState extends ModularState<SearchTab, SearchStore>
     with AfterLayoutMixin {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 1,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.grey[800],
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          bottom: TabBar(
-            indicatorColor: Colors.red,
-            tabs: [
-              Tab(
-                icon: Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                          margin: const EdgeInsets.only(bottom: 10),
-                          child: Theme(
-                            data: Theme.of(context).copyWith(
-                                primaryColor: Colors.white,
-                                // Define a cor primária como branca
-                                hintColor: Colors.white,
-                                // Define a cor da dica como branca
-                                focusColor: Colors.white),
-                            child: TextField(
-                              controller: store.inputController,
-                              decoration: const InputDecoration(
-                                labelText: 'Digite para buscar',
-                                floatingLabelBehavior:
-                                    FloatingLabelBehavior.never,
-                                // Define a dica como não flutuante
+    return GestureDetector(
 
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors
-                                          .white), // Define a cor da borda inativa como branca
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: DefaultTabController(
+        length: 1,
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.grey[800],
+            automaticallyImplyLeading: false,
+            centerTitle: true,
+            bottom: TabBar(
+              indicatorColor: Colors.red,
+              tabs: [
+                Tab(
+                  icon: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            child: Theme(
+                              data: Theme.of(context).copyWith(
+                                  primaryColor: Colors.white,
+                                  // Define a cor primária como branca
+                                  hintColor: Colors.white,
+                                  // Define a cor da dica como branca
+                                  focusColor: Colors.white),
+                              child: TextField(
+                                controller: store.inputController,
+                                decoration: const InputDecoration(
+                                  labelText: 'Digite para buscar',
+                                  floatingLabelBehavior:
+                                      FloatingLabelBehavior.never,
+                                  // Define a dica como não flutuante
+
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors
+                                            .white), // Define a cor da borda inativa como branca
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors
+                                            .white), // Define a cor da borda quando o campo está em foco como branca
+                                  ),
+                                  filled: true,
                                 ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors
-                                          .white), // Define a cor da borda quando o campo está em foco como branca
-                                ),
-                                filled: true,
+                                style: TextStyle(color: Colors.white),
                               ),
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          )),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.search, color: Colors.white),
-                      onPressed: () {
-                        store.searchUsers();
-                      },
-                    ),
-                  ],
+                            )),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.search, color: Colors.white),
+                        onPressed: () {
+                          store.searchUsers();
+                        },
+                      ),
+                    ],
+                  ),
                 ),
+              ],
+            ),
+          ),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 30,
+              ),
+              Expanded(
+                child: Observer(builder: (context) {
+                  return ListView.builder(
+                    itemCount: store.users.length,
+                    itemBuilder: (context, index) {
+                      final user = store.users[index];
+                      return ListTile(
+                        leading: user.imageUrl.isNotEmpty
+                            ? CircleAvatar(
+                                backgroundImage: AssetImage(user.imageUrl),
+                                backgroundColor: Colors.transparent,
+                              )
+                            : Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.person),
+                                ],
+                              ),
+                        title: Text(user.name),
+                        subtitle: Text(user.login),
+                        trailing: _getFollowWidget(user),
+                      );
+                    },
+                  );
+                }),
               ),
             ],
           ),
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: 30,
-            ),
-            Expanded(
-              child: Observer(builder: (context) {
-                return ListView.builder(
-                  itemCount: store.users.length,
-                  itemBuilder: (context, index) {
-                    final user = store.users[index];
-                    return ListTile(
-                      leading: user.imageUrl.isNotEmpty
-                          ? CircleAvatar(
-                              backgroundImage: AssetImage(user.imageUrl),
-                              backgroundColor: Colors.transparent,
-                            )
-                          : Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.person),
-                              ],
-                            ),
-                      title: Text(user.name),
-                      subtitle: Text(user.login),
-                      trailing: _getFollowWidget(user),
-                    );
-                  },
-                );
-              }),
-            ),
-          ],
         ),
       ),
     );
   }
 
   Widget _getFollowWidget(SearchUserModel userFound) {
-    var following = store.isFollowing(userFound);
+    var following = store.isFollowing(userFound.id);
     if(following == null) return const SizedBox();
     if (following) {
       return ElevatedButton(
