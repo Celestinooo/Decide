@@ -17,8 +17,7 @@ class CreateTab extends StatefulWidget {
   State<CreateTab> createState() => _CreateTabState();
 }
 
-class _CreateTabState extends ModularState<CreateTab,CreateChartStore> {
-
+class _CreateTabState extends ModularState<CreateTab, CreateChartStore> {
   @override
   void dispose() {
     store.titleController.dispose();
@@ -26,13 +25,13 @@ class _CreateTabState extends ModularState<CreateTab,CreateChartStore> {
   }
 
   Future<void> _selectMediaOption1() async {
-    final pickedFile = await ImagePicker()
-        .pickImage(source: ImageSource.gallery);
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      final croppedFile = await ImageCropper()
-          .cropImage(sourcePath: pickedFile.path);
+      final croppedFile =
+          await ImageCropper().cropImage(sourcePath: pickedFile.path);
       if (croppedFile == null) return;
-        store.firstOptionMedia = croppedFile.path;
+      store.firstOptionMedia = croppedFile.path;
     }
   }
 
@@ -43,11 +42,11 @@ class _CreateTabState extends ModularState<CreateTab,CreateChartStore> {
   }
 
   Future<void> _selectMediaOption2() async {
-    final pickedFile = await ImagePicker()
-        .pickImage(source: ImageSource.gallery);
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      final croppedFile = await ImageCropper()
-          .cropImage(sourcePath: pickedFile.path);
+      final croppedFile =
+          await ImageCropper().cropImage(sourcePath: pickedFile.path);
       if (croppedFile == null) return;
       store.secondOptionMedia = croppedFile.path;
     }
@@ -77,69 +76,77 @@ class _CreateTabState extends ModularState<CreateTab,CreateChartStore> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Container(
-        color: Colors.black,
-        height: MediaQuery.of(context).size.height * 0.8,
-        child: Scaffold(
-          backgroundColor: Colors.black,
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                Column(
-                  children: [
-                    _getHeader(),
-                    const SizedBox(height: 20),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Material(
+        child: Container(
+          color: Colors.black,
+          height: MediaQuery.of(context).size.height * 0.8,
+          child: Scaffold(
+            backgroundColor: Colors.black,
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Column(
                     children: [
-                      TextField(
-                        controller: store.titleController,
-                        style: const TextStyle(
-                          color: Colors.white,
-                        ),
-                        decoration: const InputDecoration(
-                          labelText: 'Título',
-                          labelStyle: TextStyle(
+                      _getHeader(),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        TextField(
+                          controller: store.titleController,
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
+                          decoration: const InputDecoration(
+                            labelText: 'Título',
+                            labelStyle: TextStyle(
                               color: Colors.white,
                             ),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Colors.white,
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white,
+                              ),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 16.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Opção 1',style: TextStyle(color: Colors.white),),
-                          if (store.firstOptionMedia.isNotEmpty)
-                            IconButton(
-                              icon: const Icon(Icons.remove_circle),
-                              onPressed: _removeMediaOption1,
+                        const SizedBox(height: 16.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Opção 1',
+                              style: TextStyle(color: Colors.white),
                             ),
-                        ],
-                      ),
-                      const SizedBox(height: 8.0),
-                      Observer(
-                        builder: (context) {
+                            if (store.firstOptionMedia.isNotEmpty)
+                              IconButton(
+                                icon: const Icon(Icons.remove_circle),
+                                onPressed: _removeMediaOption1,
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 8.0),
+                        Observer(builder: (context) {
                           var firstOptionMedia = store.firstOptionMedia;
-                          if(firstOptionMedia.isEmpty) return const SizedBox();
-                          return SizedBox(height: 200,width: 200,child: Image.file(File(firstOptionMedia),fit: BoxFit.cover),);
-                        }
-                      ),
-                      const SizedBox(height: 8.0),
+                          if (firstOptionMedia.isEmpty) return const SizedBox();
+                          return SizedBox(
+                            height: 200,
+                            width: 200,
+                            child: Image.file(File(firstOptionMedia),
+                                fit: BoxFit.cover),
+                          );
+                        }),
+                        const SizedBox(height: 8.0),
                         ElevatedButton(
                           onPressed: _selectMediaOption1,
                           style: ElevatedButton.styleFrom(
@@ -153,27 +160,34 @@ class _CreateTabState extends ModularState<CreateTab,CreateChartStore> {
                             ),
                           ),
                         ),
-                      const SizedBox(height: 16.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Opção 2',style: TextStyle(color: Colors.white),),
-                          if (store.secondOptionMedia.isNotEmpty)
-                            IconButton(
-                              icon: const Icon(Icons.remove_circle),
-                              onPressed: _removeMediaOption2,
+                        const SizedBox(height: 16.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Opção 2',
+                              style: TextStyle(color: Colors.white),
                             ),
-                        ],
-                      ),
-                      const SizedBox(height: 8.0),
-                      Observer(
-                        builder: (context) {
+                            if (store.secondOptionMedia.isNotEmpty)
+                              IconButton(
+                                icon: const Icon(Icons.remove_circle),
+                                onPressed: _removeMediaOption2,
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 8.0),
+                        Observer(builder: (context) {
                           var secondOptionMedia = store.secondOptionMedia;
-                          if(secondOptionMedia.isEmpty) return const SizedBox();
-                          return SizedBox(height: 200,width: 200,child: Image.file(File(secondOptionMedia),fit: BoxFit.cover),);
-                        }
-                      ),
-                      const SizedBox(height: 8.0),
+                          if (secondOptionMedia.isEmpty)
+                            return const SizedBox();
+                          return SizedBox(
+                            height: 200,
+                            width: 200,
+                            child: Image.file(File(secondOptionMedia),
+                                fit: BoxFit.cover),
+                          );
+                        }),
+                        const SizedBox(height: 8.0),
                         ElevatedButton(
                           onPressed: _selectMediaOption2,
                           style: ElevatedButton.styleFrom(
@@ -187,56 +201,58 @@ class _CreateTabState extends ModularState<CreateTab,CreateChartStore> {
                             ),
                           ),
                         ),
-                      const SizedBox(height: 16.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Permitir comentários',style: TextStyle(
-                            color: Colors.white,
-                          ),),
-                          Observer(
-                            builder: (context) {
+                        const SizedBox(height: 16.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'Permitir comentários',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            Observer(builder: (context) {
                               return Switch(
                                 value: store.allowComments,
                                 onChanged: (value) {
-                                    store.allowComments = value;
+                                  store.allowComments = value;
                                 },
                                 activeColor: Colors.red,
                               );
-                            }
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16.0),
-                      ElevatedButton(
-                        onPressed: _submitForm,
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.grey[800],
-                          onPrimary: Colors.white,
+                            }),
+                          ],
                         ),
-                        child: const Text(
-                          'Concluir',
-                          style: TextStyle(
-                            color: Colors.white,
+                        const SizedBox(height: 16.0),
+                        ElevatedButton(
+                          onPressed: _submitForm,
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.grey[800],
+                            onPrimary: Colors.white,
                           ),
-                        ),
-                      ),
-                      const SizedBox(height: 8.0),
-                      TextButton(
-                        child: const Text(
-                          'Cancelar',
-                          style: TextStyle(
-                            color: Colors.white,
+                          child: const Text(
+                            'Concluir',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
                         ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
+                        const SizedBox(height: 8.0),
+                        TextButton(
+                          child: const Text(
+                            'Cancelar',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -244,7 +260,7 @@ class _CreateTabState extends ModularState<CreateTab,CreateChartStore> {
     );
   }
 
-  _getHeader(){
+  _getHeader() {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -283,6 +299,5 @@ class _CreateTabState extends ModularState<CreateTab,CreateChartStore> {
         ],
       ),
     );
-
   }
 }
