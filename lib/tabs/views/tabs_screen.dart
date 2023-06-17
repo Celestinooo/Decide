@@ -1,3 +1,5 @@
+import 'package:decide/tabs/stores/following_store.dart';
+import 'package:decide/tabs/stores/profile_store.dart';
 import 'package:decide/tabs/stores/search_store.dart';
 import 'package:decide/tabs/views/tab/home_tab.dart';
 import 'package:decide/tabs/views/tab/search_tab.dart';
@@ -23,6 +25,15 @@ class _TabsScreenState extends State<TabsScreen> {
   ];
 
   void _onItemTapped(int index) {
+    if(index == 0) {
+      final followingStore = Modular.get<FollowingStore>();
+      followingStore.getCharts();
+    }
+    if(index == 2) {
+      final profileStore = Modular.get<ProfileStore>();
+      profileStore.getProfile();
+      profileStore.getCharts();
+    }
     setState(() {
       _selectedIndex = index;
     });

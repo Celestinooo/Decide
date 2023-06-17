@@ -26,7 +26,6 @@ class HomeTab extends StatelessWidget {
         ),
         body: const TabBarView(
           children: [
-            TrendingTab(),
             FollowingTab()
           ],
         ),
