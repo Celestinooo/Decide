@@ -165,9 +165,6 @@ class _ProfileTabState extends ModularState<ProfileTab, ProfileStore> with After
                           Tab(
                             text: 'Decides',
                           ),
-                          Tab(
-                            text: 'Participações',
-                          ),
                         ],
                       ),
                     ),
@@ -185,21 +182,6 @@ class _ProfileTabState extends ModularState<ProfileTab, ProfileStore> with After
                                   );
                                 });
                           }),
-                          Observer(
-                            builder: (context) {
-                              return ListView.builder(
-                                itemCount: store.charts.length,
-                                itemBuilder: (context, index) {
-                                  var repoProfile = store.getRepoProfile();
-                                  if (repoProfile == null) return const SizedBox();
-                                  return ChartParticipationWidget(
-                                    chartModel: store.charts[index],
-                                    currentUser: repoProfile,
-                                  );
-                                },
-                              );
-                            }
-                          ),
                         ],
                       ),
                     ),

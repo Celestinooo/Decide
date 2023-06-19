@@ -272,6 +272,7 @@ class _ChartWidgetState extends State<ChartWidget> implements OnSendComment {
                                 chartModel: widget.chartModel,
                                 onSendComment: this,
                               ),
+                              isDismissible: false,
                               isScrollControlled: true
                             );
                           },

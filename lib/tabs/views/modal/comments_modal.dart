@@ -51,6 +51,8 @@ class _CommentsModalState extends State<CommentsModal> {
                   itemBuilder: (BuildContext context, int index) {
                     final comment = widget.comments[index];
                     var commentOwner = comment.commentOwner;
+                    var picture = comment.votedOption.picture;
+                    print("picture=$picture");
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Row(
@@ -87,6 +89,7 @@ class _CommentsModalState extends State<CommentsModal> {
                                         final currentUser = widget.currentUser;
                                         if(currentUser == null) return;
                                         widget.onSendComment.onFollowUser(currentUser, commentOwner);
+                                        FocusScope.of(context).unfocus();
                                         Navigator.of(context).pop();
                                         final snackBar = SnackBar(
                                           content: Text('Você começou a seguir ${commentOwner.name}'),
@@ -138,8 +141,8 @@ class _CommentsModalState extends State<CommentsModal> {
                                           width: 60.0,
                                           color: Colors.grey[200],
                                           child: Center(
-                                            child: Image.asset(
-                                                comment.votedOption.picture),
+                                            child: Image.file(
+                                                File(picture)),
                                           ),
                                         ),
                                       ],
